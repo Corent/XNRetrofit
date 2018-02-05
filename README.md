@@ -45,8 +45,8 @@ public class ExampleService {
     @Resource
     private RetrofitUtil<Data> exampleRetrofit;
 
-    public Data exampleMethod(String ip) {
-        Call<Data> dataCall = exampleApi.exampleMethod("param1", "param1");
+    public Data exampleMethod(String param1, String param2) {
+        Call<Data> dataCall = exampleApi.exampleMethod(param1, param1);
         return exampleRetrofit.fetch(dataCall);
     }
 }
