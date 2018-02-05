@@ -28,6 +28,8 @@ public class ExampleInterceptor extends AInterceptor {
     <bean id="exampleApi" class="com.demo.factory.RetrofitApiFactoryBean">
         <property name="serviceUrl" value="http://example/service/url"/>
         <property name="serviceInterface" value="com.demo.service.ExampleApi"/>
+        <!-- <property name="readTimeOut" value="5000" /> -->
+        <!-- <property name="writeTimeOut" value="5000" /> -->
         <property name="interceptors">
             <list>
                 <ref bean="exampleInterceptor"/>
