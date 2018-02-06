@@ -19,9 +19,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -98,6 +96,19 @@ public class RetrofitApiFactoryBean extends UrlBasedRemoteAccessor implements Fa
 
     public void setWriteTimeOut(Long writeTimeOut) {
         this.writeTimeOut = writeTimeOut;
+    }
+
+    public void setInterceptor(AInterceptor interceptor) {
+        if (interceptor == null) return;
+        if (interceptors == null || interceptors.length == 0)
+            this.interceptors = new AInterceptor[] { interceptor };
+        else {
+            List<AInterceptor> list = new ArrayList<AInterceptor>(interceptors.length + 1) {{
+                add(interceptor);
+                addAll(Arrays.asList(interceptors));
+            }};
+            interceptors = list.toArray(new AInterceptor[list.size()]);
+        }
     }
 
     public void setInterceptors(AInterceptor[] interceptors) {

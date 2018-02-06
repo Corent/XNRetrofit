@@ -30,11 +30,7 @@ public class ExampleInterceptor extends AInterceptor {
         <property name="serviceInterface" value="com.demo.service.ExampleApi"/>
         <!-- <property name="readTimeOut" value="5000" /> -->
         <!-- <property name="writeTimeOut" value="5000" /> -->
-        <property name="interceptors">
-            <list>
-                <ref bean="exampleInterceptor"/>
-            </list>
-        </property>
+        <property name="interceptor" ref="exampleInterceptor"/>
     </bean>
 ```
 3. 使用

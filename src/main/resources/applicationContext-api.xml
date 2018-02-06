@@ -7,11 +7,7 @@
     <bean id="sinaApi" class="com.sven.demo.factory.RetrofitApiFactoryBean">
         <property name="serviceUrl" value="${ip_info_service_sina}"/>
         <property name="serviceInterface" value="com.sven.demo.service.SinaApi"/>
-        <property name="interceptors">
-            <list>
-                <ref bean="apiAuthInterceptor"/>
-            </list>
-        </property>
+        <property name="interceptor" ref="apiAuthInterceptor" />
     </bean>
 
 </beans>
