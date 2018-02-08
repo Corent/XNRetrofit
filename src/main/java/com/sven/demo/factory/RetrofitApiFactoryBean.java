@@ -34,12 +34,11 @@ public class RetrofitApiFactoryBean extends UrlBasedRemoteAccessor implements Fa
 
     private Long writeTimeOut;
 
-    private AInterceptor[] interceptors;
+    private List<AInterceptor> interceptors = new ArrayList<>();
 
     private Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong())).create();
 
-    public RetrofitApiFactoryBean() {
-    }
+    public RetrofitApiFactoryBean() {}
 
     @Override
     public Object getObject() throws Exception {
@@ -47,11 +46,11 @@ public class RetrofitApiFactoryBean extends UrlBasedRemoteAccessor implements Fa
         Class<?> apInterface = getServiceInterface();
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl(host.endsWith("/")? host: host + "/");
         boolean flagReadTimeOut = readTimeOut != null, flagWriteTimeOut = writeTimeOut != null;
-        boolean flagInterceptor = interceptors != null && interceptors.length > 0;
+        boolean flagInterceptor = interceptors.size() > 0;
         if (flagReadTimeOut || flagWriteTimeOut || flagInterceptor) {
             OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
             if (flagInterceptor) {
-                Arrays.stream(interceptors).forEach(interceptor -> {
+                interceptors.stream().forEach(interceptor -> {
                     if (interceptor == null) return;
                     Set<String> apis = Arrays.stream(apInterface.getMethods()).map(method -> {
                         if (method.isAnnotationPresent(DoNotIntercept.class)) return null;
@@ -100,18 +99,10 @@ public class RetrofitApiFactoryBean extends UrlBasedRemoteAccessor implements Fa
 
     public void setInterceptor(AInterceptor interceptor) {
         if (interceptor == null) return;
-        if (interceptors == null || interceptors.length == 0)
-            this.interceptors = new AInterceptor[] { interceptor };
-        else {
-            List<AInterceptor> list = new ArrayList<AInterceptor>(interceptors.length + 1) {{
-                add(interceptor);
-                addAll(Arrays.asList(interceptors));
-            }};
-            interceptors = list.toArray(new AInterceptor[list.size()]);
-        }
+        interceptors.add(interceptor);
     }
 
-    public void setInterceptors(AInterceptor[] interceptors) {
+    public void setInterceptors(List<AInterceptor> interceptors) {
         this.interceptors = interceptors;
     }
 
